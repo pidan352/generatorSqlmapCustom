@@ -50,7 +50,7 @@
 		
 		<!-- 指定数据库表    %表示生成所有表
 		domainObjectName：生成的类的名称，不指定默认数据库表名（驼峰式）-->
-		<table tableName="%" domainObjectName=""></table>
+		<table tableName="tb_address" domainObjectName="Address"></table>
 		<!-- 有些表的字段需要指定java类型
 		 <table schema="" tableName="">
 			<columnOverride column="" javaType="" />

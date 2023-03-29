@@ -1,59 +1,120 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE generatorConfiguration
-  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
-  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 
 <generatorConfiguration>
-	<context id="testTables" targetRuntime="MyBatis3">
-		<commentGenerator>
-			<!-- 是否去除自动生成的注释 true：是 ： false:否 -->
-			<property name="suppressAllComments" value="true" />
-		</commentGenerator>
-		<!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
-		 
-		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
-			connectionURL="jdbc:mysql://localhost:3306/pinyougoudb" userId="root"
-			password="">
-		</jdbcConnection>
-		
-		 <!--
-		<jdbcConnection driverClass="oracle.jdbc.OracleDriver"
-			connectionURL="jdbc:oracle:thin:@localhost:1521:orcl" 
-			userId="jason"
-			password="jason">
-		</jdbcConnection>
-  		-->
-		<!-- 默认false，把JDBC DECIMAL 和 NUMERIC 类型解析为 Integer，为 true时把JDBC DECIMAL 和 
-			NUMERIC 类型解析为java.math.BigDecimal -->
-		<javaTypeResolver>
-			<property name="forceBigDecimals" value="false" />
-		</javaTypeResolver>
+    <!--
+    <context>元素用于指定生成一组对象的环境,至少一个
+    该元素只有一个必选属性id,用来唯一确定一个<context>元素
+    可选属性:
+    	defaultModelType:这个属性定义了MBG如何生成实体类
+    	可选值： conditional:这是默认值,这个模型和下面的hierarchical类似，除了如果那个单独的类将只包含
+    						一个字段，将不会生成一个单独的类。 因此,如果一个表的主键只有一个字段,那么不
+    						会为该字段生成单独的实体类,会将该字段合并到基本实体类中。
+				flat:该模型为每一张表只生成一个实体类。这个实体类包含表中的所有字段。这种模型最简单，推荐使用。
+				hierarchical:如果表有主键,那么该模型会产生一个单独的主键实体类,如果表还有BLOB字段，
+				则会为表生成一个包含所有BLOB字段的单独的实体类,然后为所有其他的字段生成一个单独的实体类。
+				MBG会在所有生成的实体类之间维护一个继承关系。
 
-		<!-- targetProject:生成POjO类的位置 -->
-		<javaModelGenerator targetPackage="pojo" targetProject=".\src">
-			<!-- enableSubPackages:是否让schema作为包的后缀 -->
-			<property name="enableSubPackages" value="false" />
-			<!-- 从数据库返回的值被清理前后的空格 -->
-			<property name="trimStrings" value="true" />
-		</javaModelGenerator>
+		targetRuntime:此属性用于指定生成的代码的运行时环境。
+		可选值:  MyBatis3:这是默认值
+				MyBatis3Simple 不会生成Example
+				Ibatis2Java2
+				Ibatis2Java5 一般情况下使用默认值即可，有关这些值的具体作用以及区别请查看中文文档的详细内容。
 
-        <!-- targetProject:mapper映射文件生成的位置 -->
-		<sqlMapGenerator targetPackage="xml" targetProject=".\src\mapper">
-			<!-- enableSubPackages:是否让schema作为包的后缀 -->
-			<property name="enableSubPackages" value="false" />
-		</sqlMapGenerator>
-		<!-- targetPackage：mapper接口生成的位置 -->
-		<javaClientGenerator type="XMLMAPPER" targetPackage="mapper" targetProject=".\src">
-			<!-- enableSubPackages:是否让schema作为包的后缀 -->
-			<property name="enableSubPackages" value="false" />
-		</javaClientGenerator>
-		
-		<!-- 指定数据库表    %表示生成所有表
-		domainObjectName：生成的类的名称，不指定默认数据库表名（驼峰式）-->
-		<table tableName="tb_address" domainObjectName="Address"></table>
-		<!-- 有些表的字段需要指定java类型
-		 <table schema="" tableName="">
-			<columnOverride column="" javaType="" />
-		</table> -->
-	</context>
+		introspectedColumnImpl:该参数可以指定扩展org.mybatis.generator.api.IntrospectedColumn该类的实现类。
+								可用于自定义生成的类的名称的规则
+    -->
+    <context id="testTables" targetRuntime="MyBatis3">
+        <commentGenerator>
+            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+        <!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/pinyougoudb" userId="root"
+                        password="">
+        </jdbcConnection>
+        <!--
+       <jdbcConnection driverClass="oracle.jdbc.OracleDriver"
+           connectionURL="jdbc:oracle:thin:@localhost:1521:orcl"
+           userId="jason"
+           password="jason">
+       </jdbcConnection>
+         -->
+
+        <!-- 定JDBC类型和Java类型如何转换 默认false，把JDBC DECIMAL 和 NUMERIC 类型解析为 Integer，
+        为 true时把JDBC DECIMAL 和 NUMERIC 类型解析为java.math.BigDecimal -->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!-- 该元素用来控制生成的实体类。该元素只有两个属性，都是必选的
+        	targetPackage:生成POjO类的包名，实际还会受到其他配置的影响(<table>中会提到)
+			targetProject:指定目标项目路径，使用的是文件系统的绝对路径
+        -->
+        <javaModelGenerator targetPackage="pojo" targetProject=".\src">
+            <!-- enableSubPackages:是否让schema作为包的后缀 -->
+            <property name="enableSubPackages" value="false"/>
+            <!-- 从数据库返回的值被清理前后的空格 -->
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+
+        <!--
+        	targetProject:mapper映射文件生成的位置
+        -->
+        <sqlMapGenerator targetPackage="xml" targetProject=".\src\mapper">
+            <!-- enableSubPackages:是否让schema作为包的后缀 -->
+            <property name="enableSubPackages" value="false"/>
+        </sqlMapGenerator>
+
+
+        <!-- targetPackage：mapper接口生成的位置 -->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="mapper" targetProject=".\src">
+            <!-- enableSubPackages:是否让schema作为包的后缀 -->
+            <property name="enableSubPackages" value="false"/>
+        </javaClientGenerator>
+
+        <!-- 指定数据库表    %表示生成所有表
+        domainObjectName：生成的类的名称，不指定默认数据库表名（驼峰式）-->
+        <table tableName="tb_address" domainObjectName="Address">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+
+            <!--
+            <columnRenamingRule> 该元素最多可以配置一个，使用该元素可以在生成列之前，对列进行重命名。
+            这对那些存在同一前缀的字段想在生成属性名时去除前缀的表非常有用。
+			假设一个表包含以下的列：
+				CUST_BUSINESS_NAME
+				CUST_STREET_ADDRESS
+				CUST_CITY
+				CUST_STATE
+			生成的所有属性名中如果都包含CUST的前缀可能会让人不爽。这些前缀可以通过如下方式定义重命名规则:
+				<columnRenamingRule searchString="^CUST_" replaceString="" />
+            -->
+
+            <!--
+            <columnOverride>该元素可选，可以配置多个。该元素从将某些属性默认计算的值更改为指定的值。
+            可选属性:
+				property:要使用的Java属性的名称。如果没有指定，MBG会根据列名生成。 例如，如果一个表
+						的一列名为STRT_DTE，MBG会根据<table>的useActualColumnNames属性生成STRT_DTE
+						或strtDte。
+				javaType:该列属性值为完全限定的Java类型。如果需要，这可以覆盖由JavaTypeResolver计
+						算出的类型。对某些数据库来说，这是必要的用来处理“奇怪的”数据库类型（例如MySql的
+						unsigned bigint类型需要映射为java.lang.Object)。
+				jdbcType:该列的JDBC类型(INTEGER, DECIMAL, NUMERIC, VARCHAR等等)。如果需要，这可以
+						覆盖由JavaTypeResolver计算出的类型。 对某些数据库来说，这是必要的用来处理怪异的JDBC
+						驱动 (例如DB2的LONGVARCHAR类型需要为iBATIS 映射为VARCHAR)。
+				typeHandler:用户定义的需要用来处理这列的类型处理器。它必须是一个继承iBATIS的TypeHandler
+						类或TypeHandlerCallback接口（该接口很容易继承）的全限定的类名。如果没有指定或者是
+						空白，iBATIS会用默认的类型处理器来处理类型。重要:MBG不会校验这个类型处理器是否存在
+						或者可用。 MGB只是简单的将这个值插入到生成的SQL映射的配置文件中。
+				delimitedColumnName:指定是否应在生成的SQL的列名称上增加分隔符。如果列的名称中包含空格，
+						MGB会自动添加分隔符， 所以这个重写只有当列名需要强制为一个合适的名字或者列名是数据库中
+						的保留字时是必要的。
+            -->
+        </table>
+    </context>
 </generatorConfiguration>
